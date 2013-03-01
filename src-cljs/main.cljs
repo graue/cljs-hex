@@ -55,11 +55,11 @@
 
 (defn diag-side-y [side-len]
   "The amount you move up or down drawing a diagonal side. Integer."
-  (round (* side-len sin-30)))
+  (int (round (* side-len sin-30))))
 
 (defn diag-side-x [side-len]
   "The amount you move left/right drawing a diagonal side. Integer."
-  (round (* side-len cos-30)))
+  (int (round (* side-len cos-30))))
 
 (defn cell-width [side-len]
   "The width of a hex cell with given side-length. Even integer."
@@ -67,7 +67,11 @@
 
 (defn row-height [side-len]
   "The height of a row (not cell!) with given side length. Integer."
-  (round (* side-len (+ 1 sin-30))))
+  (->>
+    (+ 1 sin-30)
+    (* side-len)
+    (round)
+    (int)))
 
 (defn vert-side-y [side-len]
   "The length of a vertical side. Basically same as side-len, but may be
