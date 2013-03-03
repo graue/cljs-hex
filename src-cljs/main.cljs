@@ -1,5 +1,6 @@
 (ns hexcanvas
-  (:require [clojure.browser.repl :as repl]))
+  (:require [clojure.browser.repl :as repl]
+            [monet.canvas :as canvas]))
 
 ; Save some typing...
 (def sin Math/sin)
@@ -79,11 +80,15 @@
   (- (row-height side-len) (diag-side-y side-len)))
 
 
-; TODO: Do the actual drawing, via Monet.
-; https://github.com/osbert/monet
+; TODO: Draw an actual board, not just a stupid triangle.
+(defn ^:export draw [board]
+  (->
+    (canvas/get-context board "2d")
+    (canvas/begin-path)
+    (canvas/move-to 150.5 150.5)
+    (canvas/line-to 200.5 150.5)
+    (canvas/line-to 175.5 183.5)
+    (canvas/line-to 150.5 150.5)
+    (canvas/stroke)))
 
-
-(defn ^:export draw []
-  (js/alert "Coming soon: HexCanvas!"))
-
-(repl/connect "http://localhost:9000/repl")
+; (repl/connect "http://localhost:9000/repl")
