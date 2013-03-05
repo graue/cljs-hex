@@ -4,3 +4,4 @@ repl/
 target/
 *~
 *.swp
+.lein-repl-history
