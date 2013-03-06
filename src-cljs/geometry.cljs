@@ -1,10 +1,10 @@
 (ns hexcanvas.geometry)
 
 ; Save some typing...
-(def sin Math/sin)
-(def cos Math/cos)
-(def floor Math/floor)
-(def round Math/round)
+(defn sin   [x] (Math/sin x))
+(defn cos   [x] (Math/cos x))
+(defn floor [x] (Math/floor x))
+(defn round [x] (Math/round x))
 (def pi Math/PI)
 
 
@@ -25,7 +25,7 @@
 ; Cell sizes are also limited by height. These definitions will come in
 ; handy:
 (def sin-30 (sin (/ pi 6)))
-(def cos-30 (sin (/ pi 6)))
+(def cos-30 (cos (/ pi 6)))
 
 ; There's a little vertical overlap between hexes on one row and the next.
 ; The top of a row is cellHeight * (1-sin(pi/6)) below the top of the
@@ -62,7 +62,7 @@
 
 (defn- cell-width [side-len]
   "The width of a hex cell with given side-length. Even integer."
-  (* diag-side-x 2))
+  (* (diag-side-x side-len) 2))
 
 (defn- row-height [side-len]
   "The height of a row (not cell!) with given side length. Integer."
