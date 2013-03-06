@@ -28,13 +28,23 @@
 
 (defn ^:export draw [board]
   (let [w 700 h 500 cols 10 rows 10
-        {diag-x :diag-x diag-y :diag-y row-h :row-h vert-y :vert-y}
+        {diag-x :diag-x diag-y :diag-y row-h :row-h vert-y :vert-y
+         cell-w :cell-w}
           (hexboard-geometry w h cols rows)
         ctx (canvas/get-context board "2d")]
     (dotimes [row (+ 1 rows)]
       (let [row-top (* row row-h)
-            row-indent (+ (* (- row 1) diag-x)
-                          (* (.-lineWidth ctx) 0.5))]
-        (draw-path ctx
-                   (get-zigzag-pts row-indent row-top diag-x diag-y
-                                   (* 2 cols)))))))
+            row-indent (+ (* row diag-x)
+                          (* (.-lineWidth ctx) 0.5))
+            first-row? (== row 0)
+            last-row? (== row rows)
+            diag-pts
+              (get-zigzag-pts (- row-indent diag-x) row-top
+                               diag-x diag-y
+                               (+ (* 2 cols) 1))]
+        (draw-path ctx diag-pts)
+        (if (< row rows)
+          (dotimes [col (+ 1 cols)]
+            (let [col-x (+ row-indent (* col cell-w))
+                  col-top (+ row-top diag-y)]
+              (draw-path ctx [[col-x col-top] [col-x (+ col-top vert-y)]]))))))))
