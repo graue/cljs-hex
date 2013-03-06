@@ -42,8 +42,12 @@
               (get-zigzag-pts (- row-indent diag-x) row-top
                                diag-x diag-y
                                (+ (* 2 cols) 1))]
-        (draw-path ctx diag-pts)
-        (if (< row rows)
+        (draw-path
+          ctx
+          (cond first-row? (subvec diag-pts 1)
+                last-row?  (subvec diag-pts 0 (- (count diag-pts) 1))
+                :else      diag-pts))
+        (if (not last-row?)
           (dotimes [col (+ 1 cols)]
             (let [col-x (+ row-indent (* col cell-w))
                   col-top (+ row-top diag-y)]
