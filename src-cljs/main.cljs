@@ -35,7 +35,7 @@
   (let [{w :w h :h cols :cols rows :rows
          diag-x :diag-x diag-y :diag-y row-h :row-h vert-y :vert-y
          cell-w :cell-w}
-          board
+          board  ; refers to the global "board" defined above
         ctx (canvas/get-context canvas-elmt "2d")]
     (dotimes [row (+ 1 rows)]
       (let [row-top (* row row-h)
@@ -59,6 +59,7 @@
               (draw-path ctx [[col-x col-top] [col-x (+ col-top vert-y)]]))))))))
 
 (defn total-offset [elmt]
+  "Find offset of an element's top-left corner within page. Returns a pair."
   (loop [offset-x 0, offset-y 0, current elmt]
     (let [offset-x (+ offset-x (.-offsetLeft current)
                                 (- (.-scrollLeft current)))
@@ -75,6 +76,70 @@
     [(- (.-pageX event) offset-x)
      (- (.-pageY event) offset-y)]))
 
+(defn row-in-board [x y board]
+  (.log js/console (str "==> Testing point (" x "," y ")"))
+  (if (>= (mod y (:row-h board))
+          (:diag-y board))
+    ; Easy case: point is in the rectangular area between hex tops and
+    ; bottoms.
+    (do
+      (.log js/console "Easy case")
+      (Math/floor (/ y (:row-h board))))
+
+    ; Not in rectangular section; this is harder.
+    (let [lower-row (Math/floor (/ y (:row-h board)))
+          upper-row (- lower-row 1)
+
+          ; Point must be in either upper-row or lower-row.
+          ;
+          ; Consider the diagonal lines that separate these two rows.
+          ; If we draw a bounding box around each such line,
+          ; the point (x,y) is in one such bounding box. Which one?
+          ;
+          ; (Consider 0 the leftmost bounding box for the bottom of
+          ;  upper-row.)
+
+          which-box
+            (- (Math/floor (/ x (:diag-x board))) upper-row)
+
+          ; Does the line rise to the right?
+          fwd-line? (odd? which-box)
+
+          slope (* (/ (:diag-y board) (:diag-x board))
+                    (if fwd-line? -1 1))
+
+          sy ; Starting y point of the line.
+            (+ (* (:row-h board) lower-row)
+               (if fwd-line? (:diag-y board) 0))
+
+          sx ; Starting x point of the line.
+            (* (:diag-x board)
+               (+ which-box upper-row))
+
+          f ; Function for the line we're testing against
+            (fn [x] (+ (* slope (- x sx))
+                       sy))]
+
+      (.log js/console "Hard case")
+      (.log js/console
+        (str "f(x) = " slope "*(" x "-" sx ") + " sy))
+      (.log js/console (str "x=" x ",y=" y ",lineY=" (f x)))
+      (.log js/console
+        (str "Line runs from (" sx "," (f sx) ") to ("
+             (+ sx (:diag-x board)) ","
+             (f (+ sx (:diag-x board))) ") supposedly"))
+      (if (>= (f x) y) ; above the line
+        upper-row
+        lower-row))))
+
+(defn cell-in-board [x y board]
+  "Which cell is represented by pixel (x,y) in the board: [col row] pair."
+  (let [row (row-in-board x y board)
+        col (Math/floor (/ (- x (* (:diag-x board) row))
+                        (:cell-w board)))]
+    [row col]))
+
 (defn ^:export click [event]
-  (let [[x y] (rel-mouse-coords event)]
-    (js/alert (str "Board clicked at (" x ", " y ")"))))
+  (let [[x y] (rel-mouse-coords event)
+        [row col] (cell-in-board x y board)]
+    (js/alert (str "Clicked on cell " col " from left, " row " from top"))))
