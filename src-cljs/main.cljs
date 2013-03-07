@@ -26,12 +26,17 @@
     (vec)
     (vectors->path x0 y0)))
 
-(defn ^:export draw [board]
-  (let [w 700 h 500 cols 10 rows 10
-        {diag-x :diag-x diag-y :diag-y row-h :row-h vert-y :vert-y
+(def board
+  (let [w 700 h 500 cols 10 rows 10]
+    (conj (hexboard-geometry w h cols rows)
+          {:w w :h h :cols cols :rows rows})))
+
+(defn ^:export draw [canvas-elmt]
+  (let [{w :w h :h cols :cols rows :rows
+         diag-x :diag-x diag-y :diag-y row-h :row-h vert-y :vert-y
          cell-w :cell-w}
-          (hexboard-geometry w h cols rows)
-        ctx (canvas/get-context board "2d")]
+          board
+        ctx (canvas/get-context canvas-elmt "2d")]
     (dotimes [row (+ 1 rows)]
       (let [row-top (* row row-h)
             row-indent (+ (* row diag-x)
