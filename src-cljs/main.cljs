@@ -52,3 +52,24 @@
             (let [col-x (+ row-indent (* col cell-w))
                   col-top (+ row-top diag-y)]
               (draw-path ctx [[col-x col-top] [col-x (+ col-top vert-y)]]))))))))
+
+(defn total-offset [elmt]
+  (loop [offset-x 0, offset-y 0, current elmt]
+    (let [offset-x (+ offset-x (.-offsetLeft current)
+                                (- (.-scrollLeft current)))
+          offset-y (+ offset-y (.-offsetTop current)
+                                (- (.-scrollTop current)))
+          parent (.-offsetParent current)]
+      (if parent
+        (recur offset-x offset-y parent)
+        [offset-x offset-y]))))
+
+(defn rel-mouse-coords [event]
+  (let [target (.-target event)
+        [offset-x offset-y] (total-offset target)]
+    [(- (.-pageX event) offset-x)
+     (- (.-pageY event) offset-y)]))
+
+(defn ^:export click [event]
+  (let [[x y] (rel-mouse-coords event)]
+    (js/alert (str "Board clicked at (" x ", " y ")"))))
