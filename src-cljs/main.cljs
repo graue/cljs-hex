@@ -76,14 +76,12 @@
     [(- (.-pageX event) offset-x)
      (- (.-pageY event) offset-y)]))
 
-(defn row-in-board [x y board]
-  (.log js/console (str "==> Testing point (" x "," y ")"))
+(defn- row-in-board [x y board]
   (if (>= (mod y (:row-h board))
           (:diag-y board))
     ; Easy case: point is in the rectangular area between hex tops and
     ; bottoms.
     (do
-      (.log js/console "Easy case")
       (Math/floor (/ y (:row-h board))))
 
     ; Not in rectangular section; this is harder.
@@ -120,26 +118,27 @@
             (fn [x] (+ (* slope (- x sx))
                        sy))]
 
-      (.log js/console "Hard case")
-      (.log js/console
-        (str "f(x) = " slope "*(" x "-" sx ") + " sy))
-      (.log js/console (str "x=" x ",y=" y ",lineY=" (f x)))
-      (.log js/console
-        (str "Line runs from (" sx "," (f sx) ") to ("
-             (+ sx (:diag-x board)) ","
-             (f (+ sx (:diag-x board))) ") supposedly"))
       (if (>= (f x) y) ; above the line
         upper-row
         lower-row))))
 
-(defn cell-in-board [x y board]
+(defn- cell-in-board- [x y board]
   "Which cell is represented by pixel (x,y) in the board: [col row] pair."
   (let [row (row-in-board x y board)
         col (Math/floor (/ (- x (* (:diag-x board) row))
                         (:cell-w board)))]
-    [row col]))
+    [col row]))
+
+(defn cell-in-board [x y board]
+  "In which cell ([col row] pair) is pixel (x,y)? Nil if not in board."
+  (let [[col row] (cell-in-board- x y board)]
+    (if (and (>= col 0) (>= row 0)
+             (< col (:cols board)) (< row (:rows board)))
+      [col row]
+      nil)))
 
 (defn ^:export click [event]
   (let [[x y] (rel-mouse-coords event)
-        [row col] (cell-in-board x y board)]
-    (js/alert (str "Clicked on cell " col " from left, " row " from top"))))
+        [col row] (cell-in-board x y board)]
+    (if (and col row) ; In a valid cell?
+      (js/alert (str "Clicked on cell " col " from left, " row " from top")))))
