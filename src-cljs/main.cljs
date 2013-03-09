@@ -132,7 +132,7 @@
   "In which cell ([col row] pair) is pixel (x,y)? Nil if not in board."
   (let [[col row] (cell-in-board- x y board)]
     (when (and (>= col 0) (>= row 0)
-             (< col (:cols board)) (< row (:rows board)))
+               (< col (:cols board)) (< row (:rows board)))
       [col row])))
 
 (defn ^:export click [event]
