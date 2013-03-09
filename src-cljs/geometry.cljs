@@ -12,14 +12,14 @@
 ; to draw a rows×cols hex grid?
 ; The last row is indented by (rows-1)/2 cell widths, so...
 (defn- virtual-cell-cols [rows cols]
-  (+ cols (/ (- rows 1) 2)))
+  (+ cols (/ (dec rows) 2)))
 
 ; From this we can compute the maximum cell width.
 ; We floor the result to guarantee that
 ; virtual-cell-cols * max-cell-width <= w - 1,
 ; with max-cell-width an integer.
 (defn- max-cell-width-for-box [w rows cols]
-  (floor (/ (- w 1) (virtual-cell-cols rows cols))))
+  (floor (/ (dec w) (virtual-cell-cols rows cols))))
 
 
 ; Cell sizes are also limited by height. These definitions will come in
@@ -40,7 +40,7 @@
 
 ; Vertically, we need to fit (rows + rowBottomToRowHeightRatio) rows.
 (defn- max-row-height-for-box [h rows]
-  (floor (/ (- h 1)
+  (floor (/ (dec h)
             (+ rows row-bottom-to-row-height-ratio))))
 
 

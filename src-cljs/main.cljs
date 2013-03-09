@@ -37,23 +37,23 @@
          cell-w :cell-w}
           board  ; refers to the global "board" defined above
         ctx (canvas/get-context canvas-elmt "2d")]
-    (dotimes [row (+ 1 rows)]
+    (dotimes [row (inc rows)]
       (let [row-top (* row row-h)
             row-indent (+ (* row diag-x)
                           (* (.-lineWidth ctx) 0.5))
-            first-row? (== row 0)
+            first-row? (zero? row)
             last-row? (== row rows)
             diag-pts
               (get-zigzag-pts (- row-indent diag-x) row-top
                                diag-x diag-y
-                               (+ (* 2 cols) 1))]
+                               (inc (* 2 cols)))]
         (draw-path
           ctx
           (cond first-row? (subvec diag-pts 1)
-                last-row?  (subvec diag-pts 0 (- (count diag-pts) 1))
+                last-row?  (subvec diag-pts 0 (dec (count diag-pts)))
                 :else      diag-pts))
         (if (not last-row?)
-          (dotimes [col (+ 1 cols)]
+          (dotimes [col (inc cols)]
             (let [col-x (+ row-indent (* col cell-w))
                   col-top (+ row-top diag-y)]
               (draw-path ctx [[col-x col-top] [col-x (+ col-top vert-y)]]))))))))
@@ -81,12 +81,11 @@
           (:diag-y board))
     ; Easy case: point is in the rectangular area between hex tops and
     ; bottoms.
-    (do
-      (Math/floor (/ y (:row-h board))))
+    (Math/floor (/ y (:row-h board)))
 
     ; Not in rectangular section; this is harder.
     (let [lower-row (Math/floor (/ y (:row-h board)))
-          upper-row (- lower-row 1)
+          upper-row (dec lower-row)
 
           ; Point must be in either upper-row or lower-row.
           ;
@@ -132,10 +131,9 @@
 (defn cell-in-board [x y board]
   "In which cell ([col row] pair) is pixel (x,y)? Nil if not in board."
   (let [[col row] (cell-in-board- x y board)]
-    (if (and (>= col 0) (>= row 0)
+    (when (and (>= col 0) (>= row 0)
              (< col (:cols board)) (< row (:rows board)))
-      [col row]
-      nil)))
+      [col row])))
 
 (defn ^:export click [event]
   (let [[x y] (rel-mouse-coords event)
