@@ -50,4 +50,5 @@
           (dotimes [col (inc cols)]
             (let [col-x (+ row-indent (* col cell-w))
                   col-top (+ row-top diag-y)]
-              (draw-path ctx [[col-x col-top] [col-x (+ col-top vert-y)]]))))))))
+              (draw-path ctx [[col-x col-top]
+                              [col-x (+ col-top vert-y)]]))))))))
