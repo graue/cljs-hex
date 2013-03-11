@@ -25,12 +25,16 @@
     (vec)
     (vectors->path x0 y0)))
 
+;; TODO: Draw the board state with red/blue circles on cells.
 (defn draw-board [board canvas-elmt]
   (let [{w :w h :h cols :cols rows :rows
          diag-x :diag-x diag-y :diag-y row-h :row-h vert-y :vert-y
          cell-w :cell-w}
           board
         ctx (canvas/get-context canvas-elmt "2d")]
+    ; (canvas/clear-rect ctx {:x 0 :y 0 :w w :h h})
+    ;; XXX No idea why, but above doesn't work, below does.
+    (. ctx (clearRect 0 0 w h))
     (dotimes [row (inc rows)]
       (let [row-top (* row row-h)
             row-indent (+ (* row diag-x)
@@ -39,8 +43,8 @@
             last-row? (== row rows)
             diag-pts
               (get-zigzag-pts (- row-indent diag-x) row-top
-                               diag-x diag-y
-                               (inc (* 2 cols)))]
+                              diag-x diag-y
+                              (inc (* 2 cols)))]
         (draw-path
           ctx
           (cond first-row? (subvec diag-pts 1)
