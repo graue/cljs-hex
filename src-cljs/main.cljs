@@ -1,6 +1,6 @@
 (ns hexcanvas.main
-  (:require [monet.canvas :as canvas])
-  (:use     [hexcanvas.geometry :only (hexboard-geometry)]))
+  (:require [monet.canvas :as canvas]
+            [hexcanvas.geometry :refer (hexboard-geometry)]))
 
 (defn draw-path [ctx pts]
   (canvas/begin-path ctx)
