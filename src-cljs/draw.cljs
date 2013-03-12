@@ -25,7 +25,6 @@
     (vec)
     (vectors->path x0 y0)))
 
-;; TODO: Draw the board state with red/blue circles on cells.
 (defn draw-board [board canvas-elmt]
   (let [{w :w h :h cols :cols rows :rows
          diag-x :diag-x diag-y :diag-y row-h :row-h vert-y :vert-y
@@ -55,4 +54,26 @@
             (let [col-x (+ row-indent (* col cell-w))
                   col-top (+ row-top diag-y)]
               (draw-path ctx [[col-x col-top]
-                              [col-x (+ col-top vert-y)]]))))))))
+                              [col-x (+ col-top vert-y)]]))))))
+
+    ;;; Draw the red and blue stones atop the grid.
+    (doseq [[[col row] color] @(:state board)]
+      (let [x (+ (* row diag-x)
+                 (* (.-lineWidth ctx) 0.5)
+                 (* (+ col 0.5) cell-w))
+            y (+ (* row row-h)
+                 (/ (+ row-h diag-y) 2))]
+
+        ;; XXX As with clear-rect, there are weird problems with the Monet
+        ;; implementations of fill-style and circle; they just don't work.
+        ;; I don't know why. I've basically copied Monet's code instead and
+        ;; here it works.
+
+        ;(canvas/fill-style ctx color)
+        (set! (.-fillStyle ctx) (name color))
+
+        ;(canvas/circle ctx {:x x :y y :r (dec (/ cell-w 2))})
+        (canvas/begin-path ctx)
+        (. ctx (arc x y (dec (/ cell-w 3)) 0 (* 2 Math/PI) true))
+        (canvas/close-path ctx)
+        (canvas/fill ctx)))))
