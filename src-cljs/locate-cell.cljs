@@ -1,32 +1,32 @@
 (ns hexcanvas.locate-cell)
 
-;; This module takes a board geometry and x, y coordinates of a pixel within
-;; a canvas. Using that info, it computes which cell the pixel is in.
+;;; This module takes a board geometry and x, y coordinates of a pixel within
+;;; a canvas. Using that info, it computes which cell the pixel is in.
 
 (defn- row-in-board [x y board]
   (if (>= (mod y (:row-h board))
           (:diag-y board))
-    ; Easy case: point is in the rectangular area between hex tops and
-    ; bottoms.
+    ;; Easy case: point is in the rectangular area between hex tops and
+    ;; bottoms.
     (Math/floor (/ y (:row-h board)))
 
-    ; Not in rectangular section; this is harder.
+    ;; Not in rectangular section; this is harder.
     (let [lower-row (Math/floor (/ y (:row-h board)))
           upper-row (dec lower-row)
 
-          ; Point must be in either upper-row or lower-row.
-          ;
-          ; Consider the diagonal lines that separate these two rows.
-          ; If we draw a bounding box around each such line,
-          ; the point (x,y) is in one such bounding box. Which one?
-          ;
-          ; (Consider 0 the leftmost bounding box for the bottom of
-          ;  upper-row.)
+          ;; Point must be in either upper-row or lower-row.
+          ;;
+          ;; Consider the diagonal lines that separate these two rows.
+          ;; If we draw a bounding box around each such line,
+          ;; the point (x,y) is in one such bounding box. Which one?
+          ;;
+          ;; (Consider 0 the leftmost bounding box for the bottom of
+          ;;  upper-row.)
 
           which-box
             (- (Math/floor (/ x (:diag-x board))) upper-row)
 
-          ; Does the line rise to the right?
+          ;; Does the line rise to the right?
           fwd-line? (odd? which-box)
 
           slope (* (/ (:diag-y board) (:diag-x board))
@@ -40,11 +40,11 @@
             (* (:diag-x board)
                (+ which-box upper-row))
 
-          f ; Function for the line we're testing against
+          f ; Function for the line we're testing against.
             (fn [x] (+ (* slope (- x sx))
                        sy))]
 
-      (if (>= (f x) y) ; above the line
+      (if (>= (f x) y) ; Above the line.
         upper-row
         lower-row))))
 
