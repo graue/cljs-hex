@@ -1,9 +1,10 @@
 # cljs-hex
 
-Will someday be a hex game implementation in ClojureScript.
+Hex game implementation in ClojureScript.
 
-Right now it just draws a board in a canvas.
-(`lein cljsbuild once` and then open `hexcanvas.html` in a browser.)
+Live [here](http://toxicsli.me/hex/) (may be out of date).
+
+To build it, `lein cljsbuild once` and then open `hexcanvas.html` in a browser.
 
 ## License
 
