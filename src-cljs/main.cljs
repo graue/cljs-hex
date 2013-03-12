@@ -43,16 +43,15 @@
 (defn ^:export click [event]
   (let [[x y] (rel-mouse-coords event)
         [col row] (cell-in-board x y board)]
-    (if (and col row ; In a valid cell?
+    (when (and col row ; In a valid cell?
              (nil? (get @board-state [col row]))) ; Cell not already played in?
-      (do
-        ;; Place the stone
-        (swap! board-state conj {[col row] @current-player})
-        (.log js/console (str "Placed stone " @current-player " at " col
-                       " , " row))
-        (.log js/console (str "Board state is " @board-state))
-        ;; Switch to the next player
-        (swap! current-player next-player)
-        (.log js/console (str "Next player will be: " @current-player))
-        ;; Redraw the board
-        (draw-board board (.-target event))))))
+      ;; Place the stone
+      (swap! board-state conj {[col row] @current-player})
+      (.log js/console (str "Placed stone " @current-player " at " col
+                      " , " row))
+      (.log js/console (str "Board state is " @board-state))
+      ;; Switch to the next player
+      (swap! current-player next-player)
+      (.log js/console (str "Next player will be: " @current-player))
+      ;; Redraw the board
+      (draw-board board (.-target event)))))

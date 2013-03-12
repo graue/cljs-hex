@@ -33,7 +33,7 @@
         ctx (canvas/get-context canvas-elmt "2d")]
     ; (canvas/clear-rect ctx {:x 0 :y 0 :w w :h h})
     ;; XXX No idea why, but above doesn't work, below does.
-    (. ctx (clearRect 0 0 w h))
+    (.clearRect ctx 0 0 w h)
     (dotimes [row (inc rows)]
       (let [row-top (* row row-h)
             row-indent (+ (* row diag-x)
@@ -74,6 +74,6 @@
 
         ;(canvas/circle ctx {:x x :y y :r (dec (/ cell-w 2))})
         (canvas/begin-path ctx)
-        (. ctx (arc x y (dec (/ cell-w 3)) 0 (* 2 Math/PI) true))
+        (.arc ctx x y (dec (/ cell-w 2.75)) 0 (* 2 Math/PI) true)
         (canvas/close-path ctx)
         (canvas/fill ctx)))))
