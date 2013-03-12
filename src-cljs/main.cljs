@@ -2,7 +2,8 @@
   (:require [monet.canvas :as canvas]
             [hexcanvas.geometry :refer (hexboard-geometry)]
             [hexcanvas.draw :refer (draw-board)]
-            [hexcanvas.locate-cell :refer (cell-in-board)]))
+            [hexcanvas.locate-cell :refer (cell-in-board)]
+            [hexcanvas.check-win :refer (win-from?)]))
 
 ;; Board state is a hashmap with vector keys like [2 3], etc.
 (def board-state (atom {}))
@@ -48,8 +49,12 @@
       ;; Place the stone.
       (swap! board-state conj {[col row] @current-player})
 
-      ;; Switch to the next player.
-      (swap! current-player next-player)
-
       ;; Redraw the board.
-      (draw-board board (.-target event)))))
+      (draw-board board (.-target event))
+
+      ;; Check for a win.
+      (when (win-from? board [col row])
+        (js/alert (str (name @current-player) " wins!")))
+
+      ;; Switch to the next player.
+      (swap! current-player next-player))))
