@@ -2,15 +2,37 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Canvas Tutorial demo</title>
+    <title>Hex board game</title>
     <script type="text/javascript" src="js/main.js"></script>
     <style type="text/css">
-      canvas { border: 1px dashed black; }
+      img#fork-me { position: absolute; top: 0; right: 0; border: 0; }
+      .container { margin-left: auto; margin-right: auto;
+                   max-width: 800px; }
     </style>
   </head>
   <body onload="hexcanvas.main.draw(document.getElementById('board'));">
-    <canvas onclick="hexcanvas.main.click(event)" id="board" width="700" height="500">
-      Your browser does not support &lt;canvas&gt;. How lame.
-    </canvas>
+    <div class="container">
+      <a href="https://github.com/graue/cljs-hex"
+        ><img id="fork-me" src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"
+              alt="Fork me on GitHub">
+      </a>
+      <canvas onclick="hexcanvas.main.click(event)" id="board" width="700" height="500">
+        Your browser does not support &lt;canvas&gt;. How lame.
+      </canvas>
+      <h2>The Rules of Hex</h2>
+      <ul>
+        <li>Two players (red and blue) take turns placing stones.</li>
+        <li>Red owns the top and bottom edges. Blue owns the left and right
+          sides.</li>
+        <li>The player who connects his or her two sides with an unbroken
+          chain wins.</li>
+        <li>Red goes first. After red's first move, the second player
+          may choose to swap colors. If so, the first player, now blue,
+          immediately plays again. (The swap rule neutralizes first-player
+          advantage.)</li>
+      </ul>
+      <p>For more info and strategies, see <a href="http://www.hexwiki.org/"
+        >Hex Wiki</a>.</p>
+    </div>
   </body>
 </html>
