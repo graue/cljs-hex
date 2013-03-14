@@ -34,14 +34,10 @@
     (loop [known     #{}                      ; Set of known connected cells.
            cell start-cell
            n         1                        ; Tgk - num recurrences
-           to-visit  [start-cell]] ; Stack of cells to visit next.
+           to-visit  (list start-cell)]       ; Stack of cells to visit next.
 
       (let [known
-              (conj known cell)
-
-            ;; Remove this cell from the to-visit stack.
-            to-visit
-              (subvec to-visit 0 (dec (count to-visit)))
+            (conj known cell)
 
             ;; Get the neighbors that are the same color
             ;; and not yet known.
@@ -51,11 +47,11 @@
                     (get-neighbors board cell))
 
             to-visit
-              (vec (concat to-visit nbrs))]
+            (concat to-visit nbrs)]
 
         (if (or (empty? to-visit) (>= n 50))
           known ; Terminated - no more cells to visit.
-          (recur known (last to-visit) (inc n) to-visit))))))
+          (recur known (first to-visit) (inc n) (rest to-visit)))))))
 
 (defn win-from? [board [col row]]
   "Check if the stone at [col row] is connected to both the left and right
