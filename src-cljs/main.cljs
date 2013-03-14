@@ -10,10 +10,8 @@
 (def current-player (atom :red))
 
 (def board
-  (let [w 700 h 500 cols 10 rows 10]
-    (conj (hexboard-geometry w h cols rows)
-          {:w w :h h :cols cols :rows rows
-           :state board-state})))
+  (let [board-vals {:w 700 :h 500 :cols 10 :rows 10 :state board-state}]
+    (merge (hexboard-geometry board-vals) board-vals)))
 
 (defn next-player [pl]
   (pl {:red :blue :blue :red}))
