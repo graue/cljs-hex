@@ -16,9 +16,7 @@
            :state board-state})))
 
 (defn next-player [pl]
-  (if (= pl :red)
-    :blue
-    :red))
+  (pl {:red :blue :blue :red}))
 
 (defn ^:export draw [canvas-elmt]
   (draw-board board canvas-elmt))
