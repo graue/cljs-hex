@@ -77,7 +77,7 @@
    off by one due to rounding. Integer."
   (- (row-height side-len) (diag-side-y side-len)))
 
-(defn hexboard-geometry [w h cols rows]
+(defn hexboard-geometry [{:keys [w h cols rows]}]
   (let [side-len (max-side-len-for-box w h cols rows)]
     {:side-len side-len
      :diag-y (diag-side-y side-len)
