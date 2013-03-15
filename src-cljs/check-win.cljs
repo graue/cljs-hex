@@ -21,46 +21,37 @@
            [(inc col)      row ]   ; Right
            [(dec col) (inc row)]   ; Lower left
            [     col  (inc row)]]] ; Lower right
-    (filter
-      (fn [[col row]]
-        (and (>= row 0)
-             (>= col 0)
-             (< row (:rows board))
-             (< col (:cols board))))
-      possible-neighbors)))
 
-(defn connected-cells [board [start-col start-row]]
+    (filter (fn [[col row]]
+              (and (< -1 row (:rows board))
+                   (< -1 col (:cols board))))
+            possible-neighbors)))
+
+(defn connected-cells [board start-cell]
   "Returns a hashset of all cells connected to start cell in an unbroken
    chain of the same color."
-  (let [start-color (@(:state board) [start-col start-row])]
+  (let [start-color (@(:state board) start-cell)]
     (loop [known     #{}                      ; Set of known connected cells.
-           [col row] [start-col start-row]    ; Current cell.
+           cell start-cell
            n         1                        ; Tgk - num recurrences
-           to-visit  [[start-col start-row]]] ; Stack of cells to visit next.
+           to-visit  (list start-cell)]       ; Stack of cells to visit next.
 
       (let [known
-              (conj known [col row])
-
-            ;; Remove this cell from the to-visit stack.
-            to-visit
-              (subvec to-visit 0 (dec (count to-visit)))
+            (conj known cell)
 
             ;; Get the neighbors that are the same color
             ;; and not yet known.
             nbrs
-              (->> (get-neighbors board [col row])
-                (filter
-                  (fn [[nbrcol nbrrow]]
-                    (and
-                      (= (@(:state board) [nbrcol nbrrow]) start-color)
-                      (not (contains? known [nbrcol nbrrow]))))))
+            (filter (fn [nb] (and (= start-color (get @(:state board) nb))
+                                  (not (contains? known nb))))
+                    (get-neighbors board cell))
 
             to-visit
-              (vec (concat to-visit nbrs))]
+            (concat to-visit nbrs)]
 
         (if (or (empty? to-visit) (>= n 50))
           known ; Terminated - no more cells to visit.
-          (recur known (last to-visit) (inc n) to-visit))))))
+          (recur known (first to-visit) (inc n) (rest to-visit)))))))
 
 (defn win-from? [board [col row]]
   "Check if the stone at [col row] is connected to both the left and right

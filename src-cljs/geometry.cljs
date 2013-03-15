@@ -1,12 +1,11 @@
 (ns hexcanvas.geometry)
 
 ;;; Save some typing...
-(defn sin   [x] (Math/sin x))
-(defn cos   [x] (Math/cos x))
-(defn floor [x] (Math/floor x))
-(defn round [x] (Math/round x))
+(def sin Math/sin)
+(def cos Math/cos)
+(def floor Math/floor)
+(def round Math/round)
 (def pi Math/PI)
-
 
 ;;; How many cells do you REALLY need space for (horizontally)
 ;;; to draw a rows×cols hex grid?
@@ -77,7 +76,7 @@
    off by one due to rounding. Integer."
   (- (row-height side-len) (diag-side-y side-len)))
 
-(defn hexboard-geometry [w h cols rows]
+(defn hexboard-geometry [{:keys [w h cols rows]}]
   (let [side-len (max-side-len-for-box w h cols rows)]
     {:side-len side-len
      :diag-y (diag-side-y side-len)
