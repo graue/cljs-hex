@@ -40,11 +40,11 @@
             (* (:diag-x board)
                (+ which-box upper-row))
 
-          f ; Function for the line we're testing against.
-            (fn [x] (+ (* slope (- x sx))
-                       sy))]
+          line-y ; Y value on the line we're testing against.
+            (+ (* slope (- x sx))
+               sy)]
 
-      (if (>= (f x) y) ; Above the line.
+      (if (>= line-y y) ; Above the line.
         upper-row
         lower-row))))
 
@@ -52,12 +52,12 @@
   "Which cell is represented by pixel (x,y) in the board: [col row] pair."
   (let [row (row-in-board x y board)
         col (Math/floor (/ (- x (* (:diag-x board) row))
-                        (:cell-w board)))]
+                           (:cell-w board)))]
     [col row]))
 
 (defn cell-in-board [x y board]
   "In which cell ([col row] pair) is pixel (x,y)? Nil if not in board."
   (let [[col row] (cell-in-board- x y board)]
-    (when (and (>= col 0) (>= row 0)
-               (< col (:cols board)) (< row (:rows board)))
+    (when (and (< -1 col (:cols board))
+               (< -1 row (:rows board)))
       [col row])))
