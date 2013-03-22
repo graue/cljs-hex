@@ -33,7 +33,6 @@
   (let [start-color (@(:state board) start-cell)]
     (loop [known     #{}                      ; Set of known connected cells.
            cell start-cell
-           n         1                        ; Tgk - num recurrences
            to-visit  [start-cell]] ; Stack of cells to visit next.
 
       (let [known
@@ -53,9 +52,9 @@
             to-visit
               (vec (concat to-visit nbrs))]
 
-        (if (or (empty? to-visit) (>= n 50))
+        (if (empty? to-visit)
           known ; Terminated - no more cells to visit.
-          (recur known (last to-visit) (inc n) to-visit))))))
+          (recur known (last to-visit) to-visit))))))
 
 (defn win-from? [board [col row]]
   "Check if the stone at [col row] is connected to both the left and right
