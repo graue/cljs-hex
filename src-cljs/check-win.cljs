@@ -31,16 +31,12 @@
   "Returns a hashset of all cells connected to start cell in an unbroken
    chain of the same color."
   (let [start-color (@(:state board) start-cell)]
-    (loop [known     #{}                      ; Set of known connected cells.
-           cell start-cell
-           to-visit  [start-cell]] ; Stack of cells to visit next.
+    (loop [known    #{}                ; Set of known connected cells.
+           cell     start-cell
+           to-visit (list start-cell)] ; Stack of cells to visit next.
 
       (let [known
               (conj known cell)
-
-            ;; Remove this cell from the to-visit stack.
-            to-visit
-              (subvec to-visit 0 (dec (count to-visit)))
 
             ;; Get the neighbors that are the same color
             ;; and not yet known.
@@ -50,11 +46,11 @@
                     (get-neighbors board cell))
 
             to-visit
-              (vec (concat to-visit nbrs))]
+              (concat nbrs to-visit)]
 
         (if (empty? to-visit)
           known ; Terminated - no more cells to visit.
-          (recur known (last to-visit) to-visit))))))
+          (recur known (first to-visit) (rest to-visit)))))))
 
 (defn win-from? [board [col row]]
   "Check if the stone at [col row] is connected to both the left and right
