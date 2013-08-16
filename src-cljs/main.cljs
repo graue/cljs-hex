@@ -41,7 +41,7 @@
   (let [[x y] (rel-mouse-coords event)
         [col row] (cell-in-board x y board)]
     (when (and col row ; In a valid cell?
-             (nil? (get @board-state [col row]))) ; Cell open?
+               (nil? (get @board-state [col row]))) ; Cell open?
       ;; Place the stone.
       (swap! board-state conj {[col row] @current-player})
 
