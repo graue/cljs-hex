@@ -1,10 +1,11 @@
 (defproject hexcanvas "0.1.0-SNAPSHOT"
-  :description "Will one day be a hex game"
+  :description "Hex game for browsers"
   :license {:name "MIT License"
             :url "https://github.com/graue/luasynth/blob/master/MIT-LICENSE.txt"}
-  :dependencies [[org.clojure/clojure "1.4.0"]
-                 [rm-hull/monet "0.1.6-SNAPSHOT"]]
-  :plugins [[lein-cljsbuild "0.3.0"]]
+  :dependencies [[org.clojure/clojure "1.5.1"]
+                 [org.clojure/clojurescript "0.0-1913"]
+                 [rm-hull/monet "0.1.8"]]
+  :plugins [[lein-cljsbuild "0.3.3"]]
   :hooks [leiningen.cljsbuild]
   :cljsbuild {:builds
                {:main {:source-paths ["src-cljs"]
