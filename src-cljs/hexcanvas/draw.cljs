@@ -31,9 +31,7 @@
          cell-w :cell-w}
           board
         ctx (canvas/get-context canvas-elmt "2d")]
-    ; (canvas/clear-rect ctx {:x 0 :y 0 :w w :h h})
-    ;; XXX No idea why, but above doesn't work, below does.
-    (.clearRect ctx 0 0 w h)
+    (canvas/clear-rect ctx {:x 0 :y 0 :w w :h h})
     (dotimes [row (inc rows)]
       (let [row-top (* row row-h)
             row-indent (+ (* row diag-x)
@@ -64,16 +62,5 @@
             y (+ (* row row-h)
                  (/ (+ row-h diag-y) 2))]
 
-        ;; XXX As with clear-rect, there are weird problems with the Monet
-        ;; implementations of fill-style and circle; they just don't work.
-        ;; I don't know why. I've basically copied Monet's code instead and
-        ;; here it works.
-
-        ;(canvas/fill-style ctx color)
-        (set! (.-fillStyle ctx) (name color))
-
-        ;(canvas/circle ctx {:x x :y y :r (dec (/ cell-w 2))})
-        (canvas/begin-path ctx)
-        (.arc ctx x y (dec (/ cell-w 2.75)) 0 (* 2 Math/PI) true)
-        (canvas/close-path ctx)
-        (canvas/fill ctx)))))
+        (canvas/fill-style ctx color)
+        (canvas/circle ctx {:x x :y y :r (dec (/ cell-w 2.75))})))))
