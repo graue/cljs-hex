@@ -21,15 +21,9 @@
 
 (defn total-offset [elmt]
   "Find offset of an element's top-left corner within page. Returns a pair."
-  (loop [offset-x 0, offset-y 0, current elmt]
-    (let [offset-x (+ offset-x (.-offsetLeft current)
-                               (- (.-scrollLeft current)))
-          offset-y (+ offset-y (.-offsetTop current)
-                               (- (.-scrollTop current)))
-          parent (.-offsetParent current)]
-      (if parent
-        (recur offset-x offset-y parent)
-        [offset-x offset-y]))))
+  (let [bounding-rect (.getBoundingClientRect elmt)]
+    [(+ (.-scrollX js/window) (.-left bounding-rect))
+     (+ (.-scrollY js/window) (.-top bounding-rect))]))
 
 (defn rel-mouse-coords [event]
   (let [target (.-target event)
