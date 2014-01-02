@@ -2,12 +2,12 @@
 
 Hex game implementation in ClojureScript.
 
-Live [here](http://toxicsli.me/hex/) (may be out of date).
+[Play it live here](http://toxicsli.me/hex/).
 
-To build it, `lein cljsbuild once` and then open `hexcanvas.html` in a browser.
+To build it, run `lein cljsbuild once main`, start a localhost web
+server (e.g. `python -m SimpleHTTPServer`) and connect to it in a
+browser.
 
 ## License
 
-Copyright © 2013 Scott Feeney
-
-Distributed under the MIT License.
+Distributed under the MIT License (see the file MIT-LICENSE).
