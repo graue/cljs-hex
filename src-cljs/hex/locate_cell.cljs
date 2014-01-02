@@ -1,4 +1,4 @@
-(ns hexcanvas.locate-cell)
+(ns hex.locate-cell)
 
 ;;; This module takes a board geometry and x, y coordinates of a pixel within
 ;;; a canvas. Using that info, it computes which cell the pixel is in.

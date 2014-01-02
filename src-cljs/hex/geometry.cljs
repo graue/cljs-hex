@@ -1,4 +1,4 @@
-(ns hexcanvas.geometry)
+(ns hex.geometry)
 
 ;;; Save some typing...
 (defn sin   [x] (Math/sin x))

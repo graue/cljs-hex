@@ -1,4 +1,4 @@
-(ns hexcanvas.check-win)
+(ns hex.check-win)
 
 (defn goal? [board [col row] pl]
   "Is the cell at [col row] a goal for player color pl?

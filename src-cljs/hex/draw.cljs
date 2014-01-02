@@ -1,4 +1,4 @@
-(ns hexcanvas.draw
+(ns hex.draw
   (:require [monet.canvas :as canvas]))
 
 (defn draw-path [ctx pts]

@@ -1,4 +1,4 @@
-(defproject hexcanvas "0.1.0-SNAPSHOT"
+(defproject hex "0.1.0-SNAPSHOT"
   :description "Hex game for browsers"
   :url "https://github.com/graue/cljs-hex"
   :license {:name "MIT License"

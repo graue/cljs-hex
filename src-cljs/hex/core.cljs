@@ -1,9 +1,9 @@
-(ns hexcanvas.main
+(ns hex.core
   (:require [monet.canvas :as canvas]
-            [hexcanvas.geometry :refer (hexboard-geometry)]
-            [hexcanvas.draw :refer (draw-board)]
-            [hexcanvas.locate-cell :refer (cell-in-board)]
-            [hexcanvas.check-win :refer (win-from?)]))
+            [hex.geometry :refer [hexboard-geometry]]
+            [hex.draw :refer [draw-board]]
+            [hex.locate-cell :refer [cell-in-board]]
+            [hex.check-win :refer [win-from?]]))
 
 ;; Board state is a hashmap with vector keys like [2 3], etc.
 (def board-state (atom {}))

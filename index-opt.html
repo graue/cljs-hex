@@ -9,13 +9,13 @@
                    max-width: 800px; }
     </style>
   </head>
-  <body onload="hexcanvas.main.draw(document.getElementById('board'));">
+  <body onload="hex.core.draw(document.getElementById('board'));">
     <div class="container">
       <a href="https://github.com/graue/cljs-hex"
         ><img id="fork-me" src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"
               alt="Fork me on GitHub">
       </a>
-      <canvas onclick="hexcanvas.main.click(event)" id="board" width="700" height="500">
+      <canvas onclick="hex.core.click(event)" id="board" width="700" height="500">
         Your browser does not support &lt;canvas&gt;. How lame.
       </canvas>
       <h2>The Rules of Hex</h2>
